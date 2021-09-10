@@ -7,18 +7,26 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 find_package(Threads REQUIRED)
 find_package(RT REQUIRED)
 
+find_library(LIBRT rt) #apparently find package doesnt exists for RT, this is my work around.
+
 option(BUILD_SHARED_LIBS "Create shared libraries" ON)
 
 add_compile_options(-Wall)
 
 # libpigpio.(so|a)
 add_library(pigpio pigpio.c command.c custom.cext)
+target_include_directories(pigpio PRIVATE pigpio.h)
+target_link_libraries(pigpio ${LIBRT} Threads::Threads)
 
 # libpigpiod_if.(so|a)
 add_library(pigpiod_if pigpiod_if.c command.c)
+# target_include_directories(pigpio PUBLIC pigpiod_if.h)
+target_link_libraries(pigpiod_if ${LIBRT} Threads::Threads)
 
 # libpigpiod_if2.(so|a)
 add_library(pigpiod_if2 pigpiod_if2.c command.c)
+# target_include_directories(pigpio PUBLIC pigpiod_if2.h)
+target_link_libraries(pigpiod_if2 ${LIBRT} Threads::Threads)
 
 # x_pigpio
 add_executable(x_pigpio x_pigpio.c)
@@ -94,6 +102,7 @@ install(FILES pigpio.h pigpiod_if.h pigpiod_if2.h
 		GROUP_READ
 		WORLD_READ
 )
+
 
 file(GLOB man_1_SRC "*.1")
 install(FILES ${man_1_SRC}
