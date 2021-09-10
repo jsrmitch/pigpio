@@ -20,12 +20,12 @@ target_link_libraries(pigpio ${LIBRT} Threads::Threads)
 
 # libpigpiod_if.(so|a)
 add_library(pigpiod_if pigpiod_if.c command.c)
-# target_include_directories(pigpio PUBLIC pigpiod_if.h)
+target_include_directories(pigpio PRIVATE pigpiod_if.h)
 target_link_libraries(pigpiod_if ${LIBRT} Threads::Threads)
 
 # libpigpiod_if2.(so|a)
 add_library(pigpiod_if2 pigpiod_if2.c command.c)
-# target_include_directories(pigpio PUBLIC pigpiod_if2.h)
+target_include_directories(pigpio PRIVATE pigpiod_if2.h)
 target_link_libraries(pigpiod_if2 ${LIBRT} Threads::Threads)
 
 # x_pigpio
